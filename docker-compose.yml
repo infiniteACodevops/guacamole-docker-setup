@@ -1,11 +1,4 @@
 services:
-  init-db:
-    image: guacamole/guacamole:1.5.5
-    command: /opt/guacamole/bin/initdb.sh --mysql > /docker-entrypoint-initdb.d/initdb.sql
-    volumes:
-      - ./init-scripts:/docker-entrypoint-initdb.d
-    entrypoint: ["sh", "-c", "mkdir -p /docker-entrypoint-initdb.d && /opt/guacamole/bin/initdb.sh --mysql > /docker-entrypoint-initdb.d/initdb.sql"]
-
   guacdb:
     container_name: guacamoledb
     image: mariadb:10.11.9
@@ -18,8 +11,6 @@ services:
     volumes:
       - './db-data:/var/lib/mysql'
       - './init-scripts:/docker-entrypoint-initdb.d'
-    depends_on:
-      - init-db  # Garante que o script seja gerado antes do MariaDB iniciar
 
   guacd:
     container_name: guacd
@@ -34,7 +25,7 @@ services:
       - 8080:8080
     environment:
       GUACD_HOSTNAME: "guacd"
-      MYSQL_HOSTNAME: "guacdb"
+      MYSQL_HOSTNAME: "guacamoledb"
       MYSQL_DATABASE: "guacamole_db"
       MYSQL_USER: "guacamole_user"
       MYSQL_PASSWORD: "MariaDBUserPass"
@@ -42,7 +33,7 @@ services:
     depends_on:
       - guacdb
       - guacd
+
 volumes:
   db-data:
   init-scripts:
-
