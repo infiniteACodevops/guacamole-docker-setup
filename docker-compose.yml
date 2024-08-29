@@ -1,4 +1,3 @@
-version: '3.8'  # Atualize a versão do compose para suportar `init` containers
 services:
   init-db:
     image: guacamole/guacamole:1.5.5
