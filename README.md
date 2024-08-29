@@ -7,8 +7,10 @@ Este repositório contém a configuração necessária para executar o Guacamole
 Para configurar e iniciar o ambiente com um único comando, execute:
 
 ```bash
-git clone https://github.com/infiniteACodevops/guacamole-docker-setup.git && \
-cd guacamole-docker-setup && \
+`git clone https://github.com/infiniteACodevops/guacamole-docker-setup.git ~/guacamole-docker-setup && \
+cd ~/guacamole-docker-setup && \
 mkdir -p init-scripts && \
 docker run --rm guacamole/guacamole:1.5.5 /opt/guacamole/bin/initdb.sh --mysql > init-scripts/initdb.sql && \
+sudo chmod 755 init-scripts && \
+sudo chmod 644 init-scripts/initdb.sql && \
 docker-compose up -d
