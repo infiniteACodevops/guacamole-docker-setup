@@ -11,11 +11,15 @@ services:
     volumes:
       - './db-data:/var/lib/mysql'
       - './init-scripts:/docker-entrypoint-initdb.d'
+    networks:
+      - guacamole_network
 
   guacd:
     container_name: guacd
     image: guacamole/guacd:1.5.5
     restart: unless-stopped
+    networks:
+      - guacamole_network
 
   guacamole:
     container_name: guacamole
@@ -33,6 +37,8 @@ services:
       - guacd
     expose:
       - 8080
+    networks:
+      - guacamole_network
 
   nginx:
     image: nginx:alpine
@@ -44,3 +50,9 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - guacamole
+    networks:
+      - guacamole_network
+
+networks:
+  guacamole_network:
+    driver: bridge
